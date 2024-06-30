@@ -24,7 +24,7 @@ def main():
         # draw text
         font = pygame.font.Font(None, 36)
         text = font.render("Hello, World!", True, (255, 255, 255))
-        text_rect = text.get_rect(center=(vgc.display_size[0] // 2, vgc.display_size[1] // 2))
+        text_rect = text.get_rect(topleft=(0, 0))
         screen.blit(text, text_rect)
         
         # Update the LCD
