@@ -16,7 +16,7 @@ KEY2_PIN       = 20
 KEY3_PIN       = 16
 
 class Config:
-    def __init__(self,spi=spidev.SpiDev(0,0),spi_freq=40000000,rst = 27,dc = 25,bl = 24,bl_freq=1000,i2c=None,i2c_freq=100000):
+    def __init__(self,spi=spidev.SpiDev(0,0),spi_freq=40000000,rst = 27,dc = 25,bl = 24,bl_freq=1000):
         self.np=np
         self.INPUT = False
         self.OUTPUT = True
@@ -28,11 +28,6 @@ class Config:
         self.GPIO_DC_PIN = self.gpio_mode(dc,self.OUTPUT)
         self.GPIO_BL_PIN = self.gpio_pwm(bl)
         self.bl_DutyCycle(0)
-        
-        #init GPIO
-        # for P4:
-        # sudo vi /boot/config.txt
-        # gpio=6,19,5,26,13,21,20,16=pu
 
         self.GPIO_KEY_UP_PIN     = self.gpio_mode(KEY_UP_PIN,self.INPUT,True,None)
         self.GPIO_KEY_DOWN_PIN   = self.gpio_mode(KEY_DOWN_PIN,self.INPUT,True,None)
@@ -98,5 +93,4 @@ class Config:
         self.digital_write(self.GPIO_DC_PIN, 0)   
         self.GPIO_BL_PIN.close()
         time.sleep(0.001)
-
-### END OF FILE ###
+        
