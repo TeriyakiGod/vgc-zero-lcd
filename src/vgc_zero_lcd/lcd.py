@@ -1,4 +1,4 @@
-from config import Config
+from vgc_zero_lcd.config import Config
 import time
 import numpy as np
 import pygame

@@ -1,6 +1,5 @@
-import lcd as lcd
+import vgc_zero_lcd.lcd as lcd
 import pygame
-import config as Config
 
 class VGC:
     def __init__(self):
