@@ -20,14 +20,27 @@ class VGC:
 class Input:
     def __init__(self, config: lcd.LCD):
         self.config = config
-        self.up = self.config.GPIO_KEY_UP_PIN
-        self.down = self.config.GPIO_KEY_DOWN_PIN
-        self.left = self.config.GPIO_KEY_LEFT_PIN
-        self.right = self.config.GPIO_KEY_RIGHT_PIN
-        self.press = self.config.GPIO_KEY_PRESS_PIN
-        self.key1 = self.config.GPIO_KEY1_PIN
-        self.key2 = self.config.GPIO_KEY2_PIN
-        self.key3 = self.config.GPIO_KEY3_PIN
         
-    def get_key_value(self, key) -> bool:
-        return bool(self.config.digital_read(key))
+    def up(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY_UP_PIN)
+    
+    def down(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY_DOWN_PIN)
+    
+    def left(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY_LEFT_PIN)
+    
+    def right(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY_RIGHT_PIN)
+    
+    def press(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY_PRESS_PIN)
+    
+    def key1(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY1_PIN)
+    
+    def key2(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY2_PIN)
+    
+    def key3(self) -> bool:
+        return self.config.digital_read(self.config.GPIO_KEY3_PIN)

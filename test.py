@@ -12,7 +12,7 @@ def main():
     running = True
     
     while running:
-        if vgc.input.get_key_value(vgc.input.key1):
+        if vgc.input.key1():
             running = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -29,7 +29,7 @@ def main():
         
         # Update the LCD
         screen = pygame.transform.rotate(screen, 90)
-        screen = pygame.transform.flip(screen, True, False)
+        screen = pygame.transform.flip(screen, True, True)
         vgc.draw(screen)
         
         # Limit to 60 frames per second
