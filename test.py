@@ -25,6 +25,8 @@ def main():
         text_rect = text.get_rect(center=(vgc.display_size[0] // 2, vgc.display_size[1] // 2))
         screen.blit(text, text_rect)
         
+        # Flip the display
+        pygame.display.flip()
         # Update the LCD
         vgc.draw(screen)
         
