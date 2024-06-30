@@ -1,17 +1,15 @@
-import lcd
+from lcd import LCD, SCAN_DIR_DFT
 import pygame
 
 def main():
-    LCD = lcd.LCD()
-    Lcd_ScanDir = lcd.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
-    LCD.LCD_Init(Lcd_ScanDir)
-    LCD.LCD_Clear()
+    lcd = LCD()
+    lcd.LCD_Init(SCAN_DIR_DFT)
+    lcd.LCD_Clear()
 
     pygame.init()
     
-    screen_size = (LCD.width, LCD.height)
+    screen_size = (128,128)
     screen = pygame.display.set_mode(screen_size)
-    
     clock = pygame.time.Clock()
     
     running = True
@@ -23,8 +21,7 @@ def main():
         
         screen.fill((255, 0, 0))
         
-        pygame.display.flip()
-        LCD.draw_surface(screen)
+        lcd.LCD_DrawPygameSurface(screen)
         
         clock.tick(60)
         

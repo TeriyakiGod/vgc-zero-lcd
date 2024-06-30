@@ -276,27 +276,30 @@ class LCD(config.RaspberryPi):
 		self.digital_write(self.GPIO_DC_PIN, True)
 		for i in range(0,len(pix),4096):
 			self.spi_writebyte(pix[i:i+4096])
+   
+	def LCD_DrawPygameSurface(self, surface):
+		"""
+		Draws a pygame surface onto the LCD screen.
 
-	def draw_surface(self, surface: pygame.Surface):
-		# Convert the surface to RGB format
-		rgb_surface = pygame.Surface.convert(surface)
+		Parameters:
+		- surface: pygame.Surface object to be drawn. It must have the same dimensions as LCD_WIDTH x LCD_HEIGHT.
+		"""
+		if surface.get_width() != self.width or surface.get_height() != self.height:
+			raise ValueError('Surface dimensions must match LCD dimensions ({0}x{1}).'.format(self.width, self.height))
 		
-		# Resize the surface to match the LCD dimensions
-		resized_surface = pygame.transform.scale(rgb_surface, (self.width, self.height))
+		# Convert pygame surface to numpy array
+		img = pygame.surfarray.array3d(surface)
 		
-		# Convert the resized surface to a numpy array
-		pixel_array = pygame.surfarray.array2d(resized_surface)
+		# Convert RGB888 format to RGB565 format suitable for LCD
+		pix = np.zeros((self.width, self.height, 2), dtype=np.uint8)
+		pix[..., 0] = np.add(np.bitwise_and(img[..., 0], 0xF8), np.right_shift(img[..., 1], 5))
+		pix[..., 1] = np.add(np.bitwise_and(np.left_shift(img[..., 1], 3), 0xE0), np.right_shift(img[..., 2], 3))
+		pix = pix.flatten().tolist()
 		
-		# Convert the pixel array to the LCD format
-		lcd_array = np.zeros((self.width, self.height, 2), dtype=np.uint8)
-		lcd_array[..., [0]] = np.bitwise_and(pixel_array[..., [0]], 0xF8)
-		lcd_array[..., [1]] = np.bitwise_and(pixel_array[..., [1]], 0xE0) | np.right_shift(pixel_array[..., [2]], 3)
-		
-		# Flatten the LCD array and convert it to a list
-		lcd_data = lcd_array.flatten().tolist()
-		
-		# Set the LCD window and write the data
+		# Set LCD window to full screen
 		self.LCD_SetWindows(0, 0, self.width, self.height)
 		self.digital_write(self.GPIO_DC_PIN, True)
-		for i in range(0, len(lcd_data), 4096):
-			self.spi_writebyte(lcd_data[i:i+4096])
+		
+		# Write pixel data to LCD
+		for i in range(0, len(pix), 4096):
+			self.spi_writebyte(pix[i:i + 4096])
