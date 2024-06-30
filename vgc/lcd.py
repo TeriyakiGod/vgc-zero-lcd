@@ -1,4 +1,4 @@
-import config
+from vgc.config import Config
 import time
 import numpy as np
 import pygame
@@ -24,7 +24,7 @@ D2U_R2L = 8
 SCAN_DIR_DFT = U2D_R2L
 
 
-class LCD(config.RaspberryPi):
+class LCD(Config):
 
 	width = LCD_WIDTH
 	height = LCD_HEIGHT
@@ -33,7 +33,7 @@ class LCD(config.RaspberryPi):
 	LCD_Y_Adjust = LCD_Y
 
 	"""    Hardware reset     """
-	def  LCD_Reset(self):
+	def reset(self):
 		self.digital_write(self.GPIO_RST_PIN,True)
 		time.sleep(0.01)
 		self.digital_write(self.GPIO_RST_PIN,False)
@@ -42,115 +42,115 @@ class LCD(config.RaspberryPi):
 		time.sleep(0.01)
 
 	"""    Write register address and data     """
-	def  LCD_WriteReg(self, Reg):
+	def write_register(self, Reg):
 		self.digital_write(self.GPIO_DC_PIN, False)
 		self.spi_writebyte([Reg])
 
-	def LCD_WriteData_8bit(self, Data):
+	def write_8bit_data(self, Data):
 		self.digital_write(self.GPIO_DC_PIN, True)
 		self.spi_writebyte([Data])
 
-	def LCD_WriteData_NLen16Bit(self, Data, DataLen):
+	def write_16bit_data(self, Data, DataLen):
 		self.digital_write(self.GPIO_DC_PIN, True)
 		for i in range(0, DataLen):
 			self.spi_writebyte([Data >> 8])
 			self.spi_writebyte([Data & 0xff])
 		
 	"""    Common register initialization    """
-	def LCD_InitReg(self):
+	def init_registers(self):
 		#ST7735R Frame Rate
-		self.LCD_WriteReg(0xB1)
-		self.LCD_WriteData_8bit(0x01)
-		self.LCD_WriteData_8bit(0x2C)
-		self.LCD_WriteData_8bit(0x2D)
+		self.write_register(0xB1)
+		self.write_8bit_data(0x01)
+		self.write_8bit_data(0x2C)
+		self.write_8bit_data(0x2D)
 
-		self.LCD_WriteReg(0xB2)
-		self.LCD_WriteData_8bit(0x01)
-		self.LCD_WriteData_8bit(0x2C)
-		self.LCD_WriteData_8bit(0x2D)
+		self.write_register(0xB2)
+		self.write_8bit_data(0x01)
+		self.write_8bit_data(0x2C)
+		self.write_8bit_data(0x2D)
 
-		self.LCD_WriteReg(0xB3)
-		self.LCD_WriteData_8bit(0x01)
-		self.LCD_WriteData_8bit(0x2C)
-		self.LCD_WriteData_8bit(0x2D)
-		self.LCD_WriteData_8bit(0x01)
-		self.LCD_WriteData_8bit(0x2C)
-		self.LCD_WriteData_8bit(0x2D)
+		self.write_register(0xB3)
+		self.write_8bit_data(0x01)
+		self.write_8bit_data(0x2C)
+		self.write_8bit_data(0x2D)
+		self.write_8bit_data(0x01)
+		self.write_8bit_data(0x2C)
+		self.write_8bit_data(0x2D)
 		
 		#Column inversion 
-		self.LCD_WriteReg(0xB4)
-		self.LCD_WriteData_8bit(0x07)
+		self.write_register(0xB4)
+		self.write_8bit_data(0x07)
 		
 		#ST7735R Power Sequence
-		self.LCD_WriteReg(0xC0)
-		self.LCD_WriteData_8bit(0xA2)
-		self.LCD_WriteData_8bit(0x02)
-		self.LCD_WriteData_8bit(0x84)
-		self.LCD_WriteReg(0xC1)
-		self.LCD_WriteData_8bit(0xC5)
+		self.write_register(0xC0)
+		self.write_8bit_data(0xA2)
+		self.write_8bit_data(0x02)
+		self.write_8bit_data(0x84)
+		self.write_register(0xC1)
+		self.write_8bit_data(0xC5)
 
-		self.LCD_WriteReg(0xC2)
-		self.LCD_WriteData_8bit(0x0A)
-		self.LCD_WriteData_8bit(0x00)
+		self.write_register(0xC2)
+		self.write_8bit_data(0x0A)
+		self.write_8bit_data(0x00)
 
-		self.LCD_WriteReg(0xC3)
-		self.LCD_WriteData_8bit(0x8A)
-		self.LCD_WriteData_8bit(0x2A)
-		self.LCD_WriteReg(0xC4)
-		self.LCD_WriteData_8bit(0x8A)
-		self.LCD_WriteData_8bit(0xEE)
+		self.write_register(0xC3)
+		self.write_8bit_data(0x8A)
+		self.write_8bit_data(0x2A)
+		self.write_register(0xC4)
+		self.write_8bit_data(0x8A)
+		self.write_8bit_data(0xEE)
 		
-		self.LCD_WriteReg(0xC5)#VCOM 
-		self.LCD_WriteData_8bit(0x0E)
+		self.write_register(0xC5)#VCOM 
+		self.write_8bit_data(0x0E)
 		
 		#ST7735R Gamma Sequence
-		self.LCD_WriteReg(0xe0)
-		self.LCD_WriteData_8bit(0x0f)
-		self.LCD_WriteData_8bit(0x1a)
-		self.LCD_WriteData_8bit(0x0f)
-		self.LCD_WriteData_8bit(0x18)
-		self.LCD_WriteData_8bit(0x2f)
-		self.LCD_WriteData_8bit(0x28)
-		self.LCD_WriteData_8bit(0x20)
-		self.LCD_WriteData_8bit(0x22)
-		self.LCD_WriteData_8bit(0x1f)
-		self.LCD_WriteData_8bit(0x1b)
-		self.LCD_WriteData_8bit(0x23)
-		self.LCD_WriteData_8bit(0x37)
-		self.LCD_WriteData_8bit(0x00)
-		self.LCD_WriteData_8bit(0x07)
-		self.LCD_WriteData_8bit(0x02)
-		self.LCD_WriteData_8bit(0x10)
+		self.write_register(0xe0)
+		self.write_8bit_data(0x0f)
+		self.write_8bit_data(0x1a)
+		self.write_8bit_data(0x0f)
+		self.write_8bit_data(0x18)
+		self.write_8bit_data(0x2f)
+		self.write_8bit_data(0x28)
+		self.write_8bit_data(0x20)
+		self.write_8bit_data(0x22)
+		self.write_8bit_data(0x1f)
+		self.write_8bit_data(0x1b)
+		self.write_8bit_data(0x23)
+		self.write_8bit_data(0x37)
+		self.write_8bit_data(0x00)
+		self.write_8bit_data(0x07)
+		self.write_8bit_data(0x02)
+		self.write_8bit_data(0x10)
 
-		self.LCD_WriteReg(0xe1)
-		self.LCD_WriteData_8bit(0x0f)
-		self.LCD_WriteData_8bit(0x1b)
-		self.LCD_WriteData_8bit(0x0f)
-		self.LCD_WriteData_8bit(0x17)
-		self.LCD_WriteData_8bit(0x33)
-		self.LCD_WriteData_8bit(0x2c)
-		self.LCD_WriteData_8bit(0x29)
-		self.LCD_WriteData_8bit(0x2e)
-		self.LCD_WriteData_8bit(0x30)
-		self.LCD_WriteData_8bit(0x30)
-		self.LCD_WriteData_8bit(0x39)
-		self.LCD_WriteData_8bit(0x3f)
-		self.LCD_WriteData_8bit(0x00)
-		self.LCD_WriteData_8bit(0x07)
-		self.LCD_WriteData_8bit(0x03)
-		self.LCD_WriteData_8bit(0x10) 
+		self.write_register(0xe1)
+		self.write_8bit_data(0x0f)
+		self.write_8bit_data(0x1b)
+		self.write_8bit_data(0x0f)
+		self.write_8bit_data(0x17)
+		self.write_8bit_data(0x33)
+		self.write_8bit_data(0x2c)
+		self.write_8bit_data(0x29)
+		self.write_8bit_data(0x2e)
+		self.write_8bit_data(0x30)
+		self.write_8bit_data(0x30)
+		self.write_8bit_data(0x39)
+		self.write_8bit_data(0x3f)
+		self.write_8bit_data(0x00)
+		self.write_8bit_data(0x07)
+		self.write_8bit_data(0x03)
+		self.write_8bit_data(0x10) 
 		
 		#Enable test command
-		self.LCD_WriteReg(0xF0)
-		self.LCD_WriteData_8bit(0x01)
+		self.write_register(0xF0)
+		self.write_8bit_data(0x01)
 		
 		#Disable ram power save mode
-		self.LCD_WriteReg(0xF6)
-		self.LCD_WriteData_8bit(0x00)
+		self.write_register(0xF6)
+		self.write_8bit_data(0x00)
 		
 		#65k mode
-		self.LCD_WriteReg(0x3A)
-		self.LCD_WriteData_8bit(0x05)
+		self.write_register(0x3A)
+		self.write_8bit_data(0x05)
 
 	#********************************************************************************
 	#function:	Set the display scan and color transfer modes
@@ -158,7 +158,7 @@ class LCD(config.RaspberryPi):
 	#		Scan_dir   :   Scan direction
 	#		Colorchose :   RGB or GBR color format
 	#********************************************************************************
-	def LCD_SetGramScanWay(self, Scan_dir):
+	def set_scan_direction(self, Scan_dir):
 		#Get the screen scan direction
 		self.LCD_Scan_Dir = Scan_dir
 		
@@ -195,15 +195,15 @@ class LCD(config.RaspberryPi):
 			self.LCD_Y_Adjust = LCD_Y
 		
 		# Set the read / write scan direction of the frame memory
-		self.LCD_WriteReg(0x36)		#MX, MY, RGB mode 
-		self.LCD_WriteData_8bit( MemoryAccessReg_Data | 0x08)	#0x08 set RGB
+		self.write_register(0x36)		#MX, MY, RGB mode 
+		self.write_8bit_data( MemoryAccessReg_Data | 0x08)	#0x08 set RGB
 
 
 	#/********************************************************************************
 	#function:	
 	#			initialization
 	#********************************************************************************/
-	def LCD_Init(self, Lcd_ScanDir):
+	def init(self, Lcd_ScanDir):
 		if (self.module_init() != 0):
 			return -1
 		
@@ -211,21 +211,21 @@ class LCD(config.RaspberryPi):
 		self.bl_DutyCycle(100)
 		
 		#Hardware reset
-		self.LCD_Reset()
+		self.reset()
 		
 		#Set the initialization register
-		self.LCD_InitReg()
+		self.init_registers()
 		
 		#Set the display scan and color transfer modes	
-		self.LCD_SetGramScanWay(Lcd_ScanDir)
+		self.set_scan_direction(Lcd_ScanDir)
 		self.delay_ms(200)
 		
 		#sleep out
-		self.LCD_WriteReg(0x11)
+		self.write_register(0x11)
 		self.delay_ms(120)
 		
 		#Turn on the LCD display
-		self.LCD_WriteReg(0x29)
+		self.write_register(0x29)
 		
 	#/********************************************************************************
 	#function:	Sets the start position and size of the display area
@@ -235,32 +235,32 @@ class LCD(config.RaspberryPi):
 	#	Xend    :   X direction end coordinates
 	#	Yend    :   Y direction end coordinates
 	#********************************************************************************/
-	def LCD_SetWindows(self, Xstart, Ystart, Xend, Yend):
+	def set_display_area_position_size(self, Xstart, Ystart, Xend, Yend):
 		#set the X coordinates
-		self.LCD_WriteReg(0x2A)
-		self.LCD_WriteData_8bit(0x00)
-		self.LCD_WriteData_8bit((Xstart & 0xff) + self.LCD_X_Adjust)
-		self.LCD_WriteData_8bit(0x00)
-		self.LCD_WriteData_8bit(((Xend - 1) & 0xff) + self.LCD_X_Adjust)
+		self.write_register(0x2A)
+		self.write_8bit_data(0x00)
+		self.write_8bit_data((Xstart & 0xff) + self.LCD_X_Adjust)
+		self.write_8bit_data(0x00)
+		self.write_8bit_data(((Xend - 1) & 0xff) + self.LCD_X_Adjust)
 
 		#set the Y coordinates
-		self.LCD_WriteReg (0x2B)
-		self.LCD_WriteData_8bit(0x00)
-		self.LCD_WriteData_8bit((Ystart & 0xff) + self.LCD_Y_Adjust)
-		self.LCD_WriteData_8bit(0x00)
-		self.LCD_WriteData_8bit(((Yend - 1) & 0xff )+ self.LCD_Y_Adjust)
+		self.write_register (0x2B)
+		self.write_8bit_data(0x00)
+		self.write_8bit_data((Ystart & 0xff) + self.LCD_Y_Adjust)
+		self.write_8bit_data(0x00)
+		self.write_8bit_data(((Yend - 1) & 0xff )+ self.LCD_Y_Adjust)
 
-		self.LCD_WriteReg(0x2C)
+		self.write_register(0x2C)
 
-	def LCD_Clear(self):
+	def clear(self):
 		#hello
 		_buffer = [0xff]*(self.width * self.height * 2)
-		self.LCD_SetWindows(0, 0, self.width, self.height)
+		self.set_display_area_position_size(0, 0, self.width, self.height)
 		self.digital_write(self.GPIO_DC_PIN, True)
 		for i in range(0,len(_buffer),4096):
 			self.spi_writebyte(_buffer[i:i+4096])
 
-	def LCD_ShowImage(self,Image,Xstart,Ystart):
+	def draw_pil_image(self,Image,Xstart,Ystart):
 		if (Image == None):
 			return
 		imwidth, imheight = Image.size
@@ -272,12 +272,12 @@ class LCD(config.RaspberryPi):
 		pix[...,[0]] = np.add(np.bitwise_and(img[...,[0]],0xF8),np.right_shift(img[...,[1]],5))
 		pix[...,[1]] = np.add(np.bitwise_and(np.left_shift(img[...,[1]],3),0xE0),np.right_shift(img[...,[2]],3))
 		pix = pix.flatten().tolist()
-		self.LCD_SetWindows(0, 0, self.width , self.height)
+		self.set_display_area_position_size(0, 0, self.width , self.height)
 		self.digital_write(self.GPIO_DC_PIN, True)
 		for i in range(0,len(pix),4096):
 			self.spi_writebyte(pix[i:i+4096])
    
-	def LCD_DrawPygameSurface(self, surface):
+	def draw_surface(self, surface: pygame.Surface):
 		"""
 		Draws a pygame surface onto the LCD screen.
 
@@ -297,7 +297,7 @@ class LCD(config.RaspberryPi):
 		pix = pix.flatten().tolist()
 		
 		# Set LCD window to full screen
-		self.LCD_SetWindows(0, 0, self.width, self.height)
+		self.set_display_area_position_size(0, 0, self.width, self.height)
 		self.digital_write(self.GPIO_DC_PIN, True)
 		
 		# Write pixel data to LCD
