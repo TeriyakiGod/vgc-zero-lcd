@@ -29,7 +29,7 @@ def main():
         
         # Update the LCD
         screen = pygame.transform.rotate(screen, 90)
-        screen = pygame.transform.flip(screen, True, True)
+        screen = pygame.transform.flip(screen, False, True)
         vgc.draw(screen)
         
         # Limit to 60 frames per second
