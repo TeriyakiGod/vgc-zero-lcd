@@ -7,7 +7,7 @@ class VGC:
         self.display = lcd.LCD()
         self.display.init(lcd.SCAN_DIR_DFT)
         self.display.clear()
-        self.input = Input()
+        self.input = Input(self.display)
         self.display_size = (self.display.width, self.display.height)
     
     def draw(self, surface: pygame.Surface):
@@ -18,8 +18,7 @@ class VGC:
         self.display.module_exit()
         
 class Input:
-    def __init__(self):
-        config = Config.Config()
+    def __init__(self, config: lcd.LCD):
         self.up = config.digital_read(config.GPIO_KEY_UP_PIN)
         self.down = config.digital_read(config.GPIO_KEY_DOWN_PIN)
         self.left = config.digital_read(config.GPIO_KEY_LEFT_PIN)
