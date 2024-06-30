@@ -1,4 +1,4 @@
-from vgc.config import Config
+from config import Config
 import time
 import numpy as np
 import pygame
@@ -259,23 +259,6 @@ class LCD(Config):
 		self.digital_write(self.GPIO_DC_PIN, True)
 		for i in range(0,len(_buffer),4096):
 			self.spi_writebyte(_buffer[i:i+4096])
-
-	def draw_pil_image(self,Image,Xstart,Ystart):
-		if (Image == None):
-			return
-		imwidth, imheight = Image.size
-		if imwidth != self.width or imheight != self.height:
-			raise ValueError('Image must be same dimensions as display \
-				({0}x{1}).' .format(self.width, self.height))
-		img = np.asarray(Image)
-		pix = np.zeros((self.width,self.height,2), dtype = np.uint8)
-		pix[...,[0]] = np.add(np.bitwise_and(img[...,[0]],0xF8),np.right_shift(img[...,[1]],5))
-		pix[...,[1]] = np.add(np.bitwise_and(np.left_shift(img[...,[1]],3),0xE0),np.right_shift(img[...,[2]],3))
-		pix = pix.flatten().tolist()
-		self.set_display_area_position_size(0, 0, self.width , self.height)
-		self.digital_write(self.GPIO_DC_PIN, True)
-		for i in range(0,len(pix),4096):
-			self.spi_writebyte(pix[i:i+4096])
    
 	def draw_surface(self, surface: pygame.Surface):
 		"""

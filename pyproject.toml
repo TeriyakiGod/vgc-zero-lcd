@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "vgc_zero_lcd_teriyakigod"
+version = "0.0.1"
+authors = [
+  { name="Kacper Akdag-Ochnik", email="kacperochnik01@gmail.com" },
+]
+description = "This package allows to draw pygame display surface to 1.44 inch waveshare lcd hat module and read input values."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/TeriyakiGod/vgc-zero-lcd"
+Issues = "https://github.com/TeriyakiGod/vgc-zero-lcd/issues"

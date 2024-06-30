@@ -1,4 +1,4 @@
-from vgc.vgc import VGC
+from vgc import VGC
 import pygame
 
 # Simple game running on the VGC
