@@ -22,8 +22,8 @@ def main():
         screen.fill((0, 0, 0))
         
         # draw text
-        font = pygame.font.Font(None, 36)
-        text = font.render("Hello, World!", True, (255, 255, 255))
+        font = pygame.font.Font(None, 24)
+        text = font.render("hello world", False, (255, 255, 255))
         text_rect = text.get_rect(topleft=(0, 0))
         screen.blit(text, text_rect)
         
